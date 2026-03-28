@@ -91,10 +91,6 @@ export function Explore() {
         </div>
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-24">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white mb-6">
-              <Compass className="w-4 h-4" />
-              <span className="text-sm font-medium">Explore All Modules</span>
-            </div>
             
             <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
               Everything You Need in One Place
