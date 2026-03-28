@@ -1,20 +1,18 @@
+// src/components/LogoutButton.tsx
 import { useNavigate } from "react-router";
-import { Button } from "../components/ui/button";
+import { Button } from "./ui/button";
 
 export default function LogoutButton() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn"); // Clear login flag
-    navigate("/", { replace: true }); // Redirect to Landing page
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("role");
+    navigate("/", { replace: true });
   };
 
   return (
-    <Button
-      size="sm"
-      className="bg-red-500 text-white hover:bg-red-600"
-      onClick={handleLogout}
-    >
+    <Button onClick={handleLogout} variant="outline" className="text-red-600">
       Logout
     </Button>
   );

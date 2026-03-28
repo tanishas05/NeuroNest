@@ -1,89 +1,73 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router"; // fixed import
-import { Landing } from "./pages/Landing";
-import { ParentDashboard } from "./pages/ParentDashboard";
-import { SocialCoach } from "./pages/SocialCoach";
-import { DyslexiaGames } from "./pages/DyslexiaGames";
-import { Explore } from "./pages/Explore";
-import { Insights } from "./pages/Insights";
-import { LearningEngine } from "./pages/LearningEngine";
-import { NotFound } from "./pages/NotFound";
+// src/App.tsx
+import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { Layout } from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
-import ProtectedLayout from "./components/ProtectedLayout";
 
-function App() {
+// Import your pages/components
+import { ParentDashboard } from "./pages/ParentDashboard";
+import  ConnectChild from "./pages/ConnectChild";
+import { SocialCoach } from "./pages/SocialCoach";
+import { LearningEngine } from "./pages/LearningEngine";
+import { DyslexiaGames } from "./pages/DyslexiaGames";
+import { Landing } from "./pages/Landing";
+
+export default function App() {
   return (
     <Router>
       <Routes>
-        {/* Public landing page */}
+        {/* Landing Page */}
         <Route path="/" element={<Landing />} />
 
-        {/* Protected pages */}
-        <Route
-          path="/parent-dashboard"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
+        {/* All protected routes wrapped in Layout */}
+        <Route element={<Layout />}>
+          {/* Parent Routes */}
+          <Route
+            path="/parent-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["parent"]}>
                 <ParentDashboard />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/social-coach"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <SocialCoach />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dyslexia-games"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <DyslexiaGames />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/explore"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <Explore />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/insights"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <Insights />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/learning-engine"
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <LearningEngine />
-              </ProtectedLayout>
-            </ProtectedRoute>
-          }
-        />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/connect-child"
+            element={
+              <ProtectedRoute allowedRoles={["parent"]}>
+                <ConnectChild />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Catch-all unknown routes */}
-        <Route path="*" element={<NotFound />} />
+          {/* Child Routes */}
+          <Route
+            path="/social-coach"
+            element={
+              <ProtectedRoute allowedRoles={["child"]}>
+                <SocialCoach />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/learning"
+            element={
+              <ProtectedRoute allowedRoles={["child"]}>
+                <LearningEngine />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dyslexia-games"
+            element={
+              <ProtectedRoute allowedRoles={["child"]}>
+                <DyslexiaGames />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+
+        {/* Catch-all: redirect to landing page */}
+        <Route path="*" element={<Landing />} />
       </Routes>
     </Router>
   );
 }
-
-export default App;
