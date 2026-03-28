@@ -1,0 +1,266 @@
+{
+  "interests": {
+    "cars": {
+      "name": "Cars & Vehicles",
+      "icon": "🚗",
+      "mathProblems": [
+        {
+          "id": 1,
+          "question": "A race car travels 5 laps around a track. Each lap is 8 kilometers. How many total kilometers does the car travel?",
+          "answer": "40",
+          "difficulty": "easy"
+        },
+        {
+          "id": 2,
+          "question": "You have 3 red cars, 5 blue cars, and 2 green cars in your collection. How many cars do you have in total?",
+          "answer": "10",
+          "difficulty": "easy"
+        },
+        {
+          "id": 3,
+          "question": "A car factory makes 12 cars per hour. How many cars are made in 4 hours?",
+          "answer": "48",
+          "difficulty": "medium"
+        }
+      ],
+      "readingExercises": [
+        {
+          "id": 1,
+          "title": "The Fast Race Car",
+          "text": "Lightning was the fastest race car on the track. Every morning, Lightning would practice driving around the curves. The car loved the sound of the engine roaring. One day, Lightning won the big race!",
+          "questions": [
+            "What was the car's name?",
+            "What did Lightning love?",
+            "What happened at the end?"
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Building a Car",
+          "text": "Cars are made in factories with many parts. The engine makes the car go. The wheels help it roll. The steering wheel helps you turn. Seats keep you comfortable. All these parts work together!",
+          "questions": [
+            "Where are cars made?",
+            "What makes the car go?",
+            "What helps you turn?"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": 1,
+          "title": "Design Your Dream Car",
+          "description": "Draw and color your perfect car. What color is it? How many seats? What special features does it have?",
+          "type": "creative"
+        },
+        {
+          "id": 2,
+          "title": "Car Counting Game",
+          "description": "Look out the window for 5 minutes. Count how many red cars, blue cars, and white cars you see. Which color is most common?",
+          "type": "observation"
+        }
+      ]
+    },
+    "animals": {
+      "name": "Animals & Nature",
+      "icon": "🦁",
+      "mathProblems": [
+        {
+          "id": 1,
+          "question": "A lion pride has 4 adult lions and 6 cubs. How many lions are in the pride?",
+          "answer": "10",
+          "difficulty": "easy"
+        },
+        {
+          "id": 2,
+          "question": "A bird lays 3 eggs in each nest. If there are 4 nests, how many eggs in total?",
+          "answer": "12",
+          "difficulty": "easy"
+        },
+        {
+          "id": 3,
+          "question": "An elephant drinks 200 liters of water per day. How much water does it drink in a week (7 days)?",
+          "answer": "1400",
+          "difficulty": "medium"
+        }
+      ],
+      "readingExercises": [
+        {
+          "id": 1,
+          "title": "The Brave Little Penguin",
+          "text": "Pip was a small penguin who lived in Antarctica. Unlike other penguins, Pip was afraid of water. One day, Pip's friend fell into the ocean. Pip jumped in to help! Pip learned that being brave means doing something even when you're scared.",
+          "questions": [
+            "What was the penguin afraid of?",
+            "Why did Pip jump in the water?",
+            "What did Pip learn?"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": 1,
+          "title": "Animal Habitat Match",
+          "description": "Match each animal to where it lives: fish→ocean, camel→desert, penguin→Antarctica, monkey→jungle",
+          "type": "matching"
+        }
+      ]
+    },
+    "space": {
+      "name": "Space & Planets",
+      "icon": "🚀",
+      "mathProblems": [
+        {
+          "id": 1,
+          "question": "The moon is 384,400 kilometers from Earth. If a rocket travels 100,000 kilometers, how much farther until it reaches the moon?",
+          "answer": "284400",
+          "difficulty": "hard"
+        },
+        {
+          "id": 2,
+          "question": "There are 8 planets in our solar system. If you've visited 3, how many are left to visit?",
+          "answer": "5",
+          "difficulty": "easy"
+        },
+        {
+          "id": 3,
+          "question": "A space station orbits Earth 16 times a day. How many times does it orbit in 3 days?",
+          "answer": "48",
+          "difficulty": "medium"
+        }
+      ],
+      "readingExercises": [
+        {
+          "id": 1,
+          "title": "Journey to Mars",
+          "text": "Mars is the red planet. It's called red because of the iron in its soil. Scientists want to send people to Mars one day. The trip would take about 7 months! Astronauts would need to bring all their food and water.",
+          "questions": [
+            "Why is Mars red?",
+            "How long does the trip take?",
+            "What would astronauts need to bring?"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": 1,
+          "title": "Build a Solar System",
+          "description": "Use balls or fruits of different sizes to represent planets. Arrange them in order from the Sun!",
+          "type": "hands-on"
+        }
+      ]
+    },
+    "dinosaurs": {
+      "name": "Dinosaurs",
+      "icon": "🦕",
+      "mathProblems": [
+        {
+          "id": 1,
+          "question": "A T-Rex is 12 meters long. A Velociraptor is 2 meters long. How much longer is the T-Rex?",
+          "answer": "10",
+          "difficulty": "easy"
+        },
+        {
+          "id": 2,
+          "question": "Dinosaurs lived 65 million years ago. If humans appeared 2 million years ago, how many years between them?",
+          "answer": "63",
+          "difficulty": "hard"
+        }
+      ],
+      "readingExercises": [
+        {
+          "id": 1,
+          "title": "The Gentle Giant",
+          "text": "Brachiosaurus was one of the tallest dinosaurs. It had a long neck to reach high trees. Even though it was huge, it only ate plants. Brachiosaurus was gentle and lived in herds with its family.",
+          "questions": [
+            "Why did Brachiosaurus have a long neck?",
+            "What did it eat?",
+            "Did it live alone?"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": 1,
+          "title": "Dinosaur Timeline",
+          "description": "Draw a timeline showing when different dinosaurs lived. Which came first?",
+          "type": "creative"
+        }
+      ]
+    },
+    "sports": {
+      "name": "Sports & Games",
+      "icon": "⚽",
+      "mathProblems": [
+        {
+          "id": 1,
+          "question": "A soccer team scores 3 goals in the first half and 2 in the second. How many goals total?",
+          "answer": "5",
+          "difficulty": "easy"
+        },
+        {
+          "id": 2,
+          "question": "A basketball player makes 8 baskets. Each basket is worth 2 points. How many points?",
+          "answer": "16",
+          "difficulty": "medium"
+        }
+      ],
+      "readingExercises": [
+        {
+          "id": 1,
+          "title": "The Team Player",
+          "text": "Maya loved basketball but always wanted to score alone. Her coach taught her that passing to teammates is important. In the big game, Maya passed the ball and her team won! She learned that teamwork is more important than individual glory.",
+          "questions": [
+            "What sport did Maya play?",
+            "What did the coach teach?",
+            "What did Maya learn?"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": 1,
+          "title": "Create Your Own Game",
+          "description": "Invent a new sport! What are the rules? How do you win? What equipment do you need?",
+          "type": "creative"
+        }
+      ]
+    },
+    "music": {
+      "name": "Music & Instruments",
+      "icon": "🎵",
+      "mathProblems": [
+        {
+          "id": 1,
+          "question": "A song has 4 verses and each verse is 30 seconds. How long is the whole song?",
+          "answer": "120",
+          "difficulty": "easy"
+        },
+        {
+          "id": 2,
+          "question": "A band has 2 guitarists, 1 drummer, 1 singer, and 1 keyboard player. How many members?",
+          "answer": "5",
+          "difficulty": "easy"
+        }
+      ],
+      "readingExercises": [
+        {
+          "id": 1,
+          "title": "The Magic of Music",
+          "text": "Music is made of different sounds working together. Rhythm is the beat you tap your foot to. Melody is the tune you hum. Harmony is when different notes sound good together. When you combine all three, you create beautiful music!",
+          "questions": [
+            "What is rhythm?",
+            "What is melody?",
+            "What makes beautiful music?"
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": 1,
+          "title": "Make Your Own Instrument",
+          "description": "Use household items to create a musical instrument. Rice in a container = shaker. Rubber bands on a box = guitar!",
+          "type": "hands-on"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "wordGames": [
+    {
+      "id": 1,
+      "word": "cat",
+      "scrambled": "tac",
+      "hint": "A furry pet that says meow",
+      "difficulty": "easy"
+    },
+    {
+      "id": 2,
+      "word": "sun",
+      "scrambled": "nus",
+      "hint": "A bright star in the sky",
+      "difficulty": "easy"
+    },
+    {
+      "id": 3,
+      "word": "tree",
+      "scrambled": "eetr",
+      "hint": "A tall plant with leaves",
+      "difficulty": "easy"
+    },
+    {
+      "id": 4,
+      "word": "book",
+      "scrambled": "koob",
+      "hint": "You read this",
+      "difficulty": "easy"
+    },
+    {
+      "id": 5,
+      "word": "star",
+      "scrambled": "rats",
+      "hint": "Twinkles in the night sky",
+      "difficulty": "easy"
+    },
+    {
+      "id": 6,
+      "word": "friend",
+      "scrambled": "dirfen",
+      "hint": "Someone you like to play with",
+      "difficulty": "medium"
+    },
+    {
+      "id": 7,
+      "word": "happy",
+      "scrambled": "ppahy",
+      "hint": "A good feeling when you smile",
+      "difficulty": "medium"
+    },
+    {
+      "id": 8,
+      "word": "school",
+      "scrambled": "loohcs",
+      "hint": "Where you learn",
+      "difficulty": "medium"
+    }
+  ],
+  "phoneticPairs": [
+    {
+      "id": 1,
+      "word": "cat",
+      "sound": "/kat/",
+      "rhymesWith": ["bat", "hat", "mat", "rat"]
+    },
+    {
+      "id": 2,
+      "word": "blue",
+      "sound": "/bloo/",
+      "rhymesWith": ["true", "clue", "zoo", "new"]
+    },
+    {
+      "id": 3,
+      "word": "run",
+      "sound": "/run/",
+      "rhymesWith": ["fun", "sun", "bun", "done"]
+    },
+    {
+      "id": 4,
+      "word": "play",
+      "sound": "/play/",
+      "rhymesWith": ["day", "say", "way", "stay"]
+    },
+    {
+      "id": 5,
+      "word": "light",
+      "sound": "/lite/",
+      "rhymesWith": ["night", "bright", "kite", "white"]
+    }
+  ],
+  "readingPractice": [
+    {
+      "id": 1,
+      "title": "The Red Ball",
+      "text": ["The", "red", "ball", "rolled", "down", "the", "hill."],
+      "level": "beginner"
+    },
+    {
+      "id": 2,
+      "title": "My Dog",
+      "text": ["I", "have", "a", "dog.", "His", "name", "is", "Max.", "Max", "likes", "to", "play."],
+      "level": "beginner"
+    },
+    {
+      "id": 3,
+      "title": "Going to the Park",
+      "text": ["Today", "we", "went", "to", "the", "park.", "We", "played", "on", "the", "swings.", "It", "was", "fun!"],
+      "level": "intermediate"
+    }
+  ]
+}
