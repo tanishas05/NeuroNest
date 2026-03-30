@@ -7,9 +7,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { ParentDashboard } from "./pages/ParentDashboard";
 import  ConnectChild from "./pages/ConnectChild";
 import { SocialCoach } from "./pages/SocialCoach";
-import { LearningEngine } from "./pages/LearningEngine";
-import { DyslexiaGames } from "./pages/DyslexiaGames";
 import { Landing } from "./pages/Landing";
+import LearningEnginePage from "./pages/LearningEngine";
+import DyslexiaGamesPage from "./pages/DyslexiaGames";
 
 export default function App() {
   return (
@@ -51,7 +51,7 @@ export default function App() {
             path="/learning"
             element={
               <ProtectedRoute allowedRoles={["child"]}>
-                <LearningEngine />
+                <LearningEnginePage />
               </ProtectedRoute>
             }
           />
@@ -59,7 +59,7 @@ export default function App() {
             path="/dyslexia-games"
             element={
               <ProtectedRoute allowedRoles={["child"]}>
-                <DyslexiaGames />
+                <DyslexiaGamesPage />
               </ProtectedRoute>
             }
           />
@@ -67,6 +67,9 @@ export default function App() {
 
         {/* Catch-all: redirect to landing page */}
         <Route path="*" element={<Landing />} />
+        
+        <Route path="/learning-engine" element={<LearningEnginePage />} />
+        <Route path="/dyslexia-games"  element={<DyslexiaGamesPage />} />
       </Routes>
     </Router>
   );
