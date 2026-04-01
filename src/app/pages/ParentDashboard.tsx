@@ -1,14 +1,7 @@
-// src/app/pages/ParentDashboard.tsx
 import { useState, useEffect } from "react";
-import { Card } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Progress } from "../components/ui/progress";
+import { motion } from "motion/react";
 import { Link } from "react-router";
-import {
-  BarChart3, TrendingUp, AlertCircle, Lightbulb,
-  Activity, Clock, Users, Plus
-} from "lucide-react";
+import { TrendingUp, AlertCircle, Lightbulb, Activity, Clock, Users, Plus } from "lucide-react";
 
 interface ActivityLog {
   id: string;
@@ -19,9 +12,19 @@ interface ActivityLog {
   performance: number;
 }
 
+const TAB_META = {
+  insights:   { label: "Insights",    emoji: "💡", color: "#7c3aed", bg: "#ede9fe" },
+  activity:   { label: "Activity",    emoji: "⚡", color: "#2563eb", bg: "#dbeafe" },
+  strategies: { label: "Strategies",  emoji: "🧩", color: "#059669", bg: "#d1fae5" },
+  patterns:   { label: "Patterns",    emoji: "🔍", color: "#d97706", bg: "#fef3c7" },
+};
+
+type TabKey = keyof typeof TAB_META;
+
 export function ParentDashboard() {
   const [children, setChildren] = useState<string[]>([]);
   const [selectedChild, setSelectedChild] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<TabKey>("insights");
 
   useEffect(() => {
     const storedChildren = JSON.parse(localStorage.getItem("parentChildren") || "[]");
@@ -39,248 +42,356 @@ export function ParentDashboard() {
   }, []);
 
   const [activityLogs] = useState<ActivityLog[]>([
-    { id: "1", module: "Social Coach", activity: "Completed 3 scenarios", timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), duration: 15, performance: 85 },
-    { id: "2", module: "Learning Engine", activity: "Solved 5 math problems", timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), duration: 20, performance: 80 },
-    { id: "3", module: "Dyslexia Games", activity: "Word scramble practice", timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000), duration: 12, performance: 90 },
+    { id: "1", module: "Social Coach",   activity: "Completed 3 scenarios", timestamp: new Date(Date.now() - 2 * 3600000),  duration: 15, performance: 85 },
+    { id: "2", module: "Learning Engine",activity: "Solved 5 math problems", timestamp: new Date(Date.now() - 5 * 3600000),  duration: 20, performance: 80 },
+    { id: "3", module: "Dyslexia Games", activity: "Word scramble practice", timestamp: new Date(Date.now() - 24 * 3600000), duration: 12, performance: 90 },
   ]);
 
-  const stats = { totalSessions: 12, averageSessionTime: 18, weeklyProgress: 75, favoriteModule: "Learning Engine" };
+  const stats = [
+    { label: "Total Sessions",   value: "12",    icon: Activity,   color: "#7c3aed", bg: "#ede9fe",  suffix: "" },
+    { label: "Avg Session",      value: "18",    icon: Clock,      color: "#2563eb", bg: "#dbeafe",  suffix: "m" },
+    { label: "Weekly Progress",  value: "75",    icon: TrendingUp, color: "#059669", bg: "#d1fae5",  suffix: "%", bar: 75 },
+    { label: "Fav Module",       value: "Learn", icon: Lightbulb,  color: "#d97706", bg: "#fef3c7",  suffix: "" },
+  ];
 
   const insights = [
-    { title: "Great Progress in Learning!", message: "Your child completed 80% of math problems correctly this week.", icon: TrendingUp, color: "bg-emerald-50 border-emerald-200", iconColor: "text-emerald-500", dot: "bg-emerald-400" },
-    { title: "Social Practice Needed", message: "It's been 2 days since the last Social Coach session.", icon: AlertCircle, color: "bg-amber-50 border-amber-200", iconColor: "text-amber-500", dot: "bg-amber-400" },
-    { title: "Reading Improvement Tip", message: "Your child shows strong phonetic matching progress.", icon: Lightbulb, color: "bg-blue-50 border-blue-200", iconColor: "text-blue-500", dot: "bg-blue-400" },
+    { title: "Great Progress in Learning!", message: "80% of math problems correct this week.", icon: TrendingUp, color: "#059669", bg: "#d1fae5" },
+    { title: "Social Practice Needed",       message: "2 days since last Social Coach session.",   icon: AlertCircle, color: "#d97706", bg: "#fef3c7" },
+    { title: "Reading Improvement Tip",      message: "Strong phonetic matching progress detected.", icon: Lightbulb, color: "#7c3aed", bg: "#ede9fe" },
   ];
 
   const communicationStrategies = [
-    { strategy: "Visual Schedules", description: "Use visual timers and schedules to help transitions.", impact: "High", emoji: "📅" },
-    { strategy: "Clear Instructions", description: "Break instructions into smaller steps.", impact: "High", emoji: "📋" },
-    { strategy: "Positive Reinforcement", description: "Celebrate small wins and effort.", impact: "Medium", emoji: "🌟" },
-    { strategy: "Sensory Breaks", description: "Allow movement breaks every 20–30 minutes.", impact: "Medium", emoji: "🧘" },
+    { strategy: "Visual Schedules",     description: "Use visual timers & schedules to help transitions.",  impact: "High",   color: "#7c3aed" },
+    { strategy: "Clear Instructions",   description: "Break instructions into smaller, manageable steps.", impact: "High",   color: "#2563eb" },
+    { strategy: "Positive Reinforcement",description: "Celebrate small wins and effort consistently.",     impact: "Medium", color: "#059669" },
+    { strategy: "Sensory Breaks",        description: "Allow movement breaks every 20–30 minutes.",        impact: "Medium", color: "#d97706" },
   ];
 
   const learningPatterns = [
-    { pattern: "Best Learning Time", value: "Morning (9AM – 11AM)", insight: "Focus levels are highest during morning sessions.", emoji: "☀️" },
-    { pattern: "Strongest Skill", value: "Visual Pattern Recognition", insight: "Shape-based tasks show high accuracy.", emoji: "👁️" },
-    { pattern: "Challenge Area", value: "Social Cue Interpretation", insight: "More Social Coach practice recommended.", emoji: "💬" },
-    { pattern: "Preferred Style", value: "Interactive Games", insight: "Game-based sessions have highest engagement.", emoji: "🎮" },
+    { pattern: "Best Learning Time", value: "Morning (9AM – 11AM)",        insight: "Focus levels highest in morning sessions.", emoji: "🌅" },
+    { pattern: "Strongest Skill",    value: "Visual Pattern Recognition",  insight: "Shape-based tasks show high accuracy.",      emoji: "🧩" },
+    { pattern: "Challenge Area",     value: "Social Cue Interpretation",   insight: "More Social Coach practice recommended.",    emoji: "💬" },
+    { pattern: "Preferred Style",    value: "Interactive Games",           insight: "Game-based sessions have highest engagement.", emoji: "🎮" },
   ];
 
+  const moduleColors: Record<string, { color: string; bg: string; emoji: string }> = {
+    "Social Coach":    { color: "#7c3aed", bg: "#ede9fe", emoji: "💬" },
+    "Learning Engine": { color: "#2563eb", bg: "#dbeafe", emoji: "📚" },
+    "Dyslexia Games":  { color: "#be185d", bg: "#fce7f3", emoji: "🎮" },
+  };
+
   const formatTimeAgo = (date: Date) => {
-    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-    if (seconds < 60) return `${seconds}s ago`;
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-    return `${Math.floor(seconds / 86400)}d ago`;
-  };
-
-  const moduleColors: Record<string, string> = {
-    "Social Coach": "bg-purple-100 text-purple-700",
-    "Learning Engine": "bg-blue-100 text-blue-700",
-    "Dyslexia Games": "bg-pink-100 text-pink-700",
-  };
-
-  const moduleEmojis: Record<string, string> = {
-    "Social Coach": "🧠",
-    "Learning Engine": "📚",
-    "Dyslexia Games": "🎮",
+    const s = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (s < 60) return `${s}s ago`;
+    if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+    if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+    return `${Math.floor(s / 86400)}d ago`;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-white">
-      <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="min-h-screen px-4 py-6">
+      <div className="max-w-3xl mx-auto">
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        {/* Page header */}
+        <motion.div
+          className="flex items-center gap-4 mb-6"
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <div
+            className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg"
+            style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)" }}
+          >
+            📊
+          </div>
           <div>
-            <h1 className="text-3xl font-black text-gray-900">Parent Dashboard</h1>
-            <p className="text-gray-500 mt-1">Monitor your child's learning journey</p>
+            <h1 className="text-2xl font-black" style={{ color: "#1e1532" }}>Parent Dashboard</h1>
+            <p className="text-sm font-semibold" style={{ color: "#6b7280" }}>
+              Track progress & get actionable insights
+            </p>
           </div>
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
-            <BarChart3 className="w-6 h-6 text-white" />
-          </div>
-        </div>
+        </motion.div>
 
-        {/* Children */}
-        <div className="bg-white rounded-3xl border border-purple-100 shadow-sm p-6 mb-6">
+        {/* Connected Children */}
+        <motion.div
+          className="rounded-3xl p-5 mb-5"
+          style={{
+            background: "rgba(255,255,255,0.88)",
+            border: "1.5px solid rgba(37,99,235,0.12)",
+            boxShadow: "0 2px 20px rgba(37,99,235,0.07)",
+          }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-purple-500" />
-              <h2 className="text-lg font-black text-gray-800">Connected Children</h2>
+              <Users size={18} style={{ color: "#2563eb" }} />
+              <h2 className="font-black text-base" style={{ color: "#1e1532" }}>Connected Children</h2>
             </div>
             <Link to="/connect-child">
-              <button className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-purple-500 to-violet-600 text-white rounded-xl font-semibold text-sm hover:from-purple-600 hover:to-violet-700 transition shadow-sm">
-                <Plus className="w-4 h-4" />
-                Connect Child
-              </button>
+              <motion.button
+                className="flex items-center gap-1.5 px-4 py-2 rounded-2xl font-bold text-sm text-white shadow-md"
+                style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+              >
+                <Plus size={14} /> Connect Child
+              </motion.button>
             </Link>
           </div>
 
           {children.length === 0 ? (
-            <div className="text-center py-8">
-              <div className="text-4xl mb-3">👧</div>
-              <p className="text-gray-500 font-medium">No children connected yet.</p>
-              <p className="text-gray-400 text-sm mt-1">Use "Connect Child" to get started.</p>
+            <div className="text-center py-6 rounded-2xl" style={{ background: "#f8fafc" }}>
+              <p className="text-2xl mb-2">👨‍👧</p>
+              <p className="text-sm font-bold" style={{ color: "#9ca3af" }}>No children connected yet</p>
+              <p className="text-xs font-semibold mt-1" style={{ color: "#c4b5fd" }}>
+                Use the button above to link your child's account
+              </p>
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {children.map((child, i) => (
-                <button
-                  key={i}
+              {children.map((child, index) => (
+                <motion.button
+                  key={index}
                   onClick={() => setSelectedChild(child)}
-                  className={`p-4 rounded-2xl border-2 text-left transition-all ${
-                    selectedChild === child
-                      ? "border-purple-400 bg-purple-50 shadow-md"
-                      : "border-gray-100 bg-gray-50 hover:border-purple-200 hover:bg-purple-50"
-                  }`}
+                  className="p-3.5 rounded-2xl text-left transition-all font-bold"
+                  style={{
+                    background: selectedChild === child
+                      ? "linear-gradient(135deg, #ede9fe, #dbeafe)"
+                      : "rgba(248,250,252,1)",
+                    border: `2px solid ${selectedChild === child ? "#7c3aed" : "#e5e7eb"}`,
+                    boxShadow: selectedChild === child ? "0 4px 16px rgba(124,58,237,0.15)" : "none",
+                  }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-xl flex items-center justify-center text-white font-black">
-                      {child[0]?.toUpperCase()}
-                    </div>
-                    <div>
-                      <p className="font-bold text-gray-800">{child}</p>
-                      <p className="text-xs text-gray-400">Child Account</p>
-                    </div>
-                  </div>
-                  {selectedChild === child && (
-                    <div className="mt-2 text-xs text-purple-500 font-semibold">● Currently viewing</div>
-                  )}
-                </button>
+                  <p className="font-black text-sm" style={{ color: "#1e1532" }}>👤 {child}</p>
+                  <p className="text-xs font-semibold mt-0.5" style={{ color: "#9ca3af" }}>Child Account</p>
+                </motion.button>
               ))}
             </div>
           )}
-        </div>
 
-        {/* Stats grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {[
-            { label: "Total Sessions", value: stats.totalSessions, icon: Activity, color: "from-purple-400 to-violet-500", suffix: "" },
-            { label: "Avg Session", value: stats.averageSessionTime, icon: Clock, color: "from-blue-400 to-indigo-500", suffix: "min" },
-            { label: "Weekly Progress", value: stats.weeklyProgress, icon: TrendingUp, color: "from-emerald-400 to-green-500", suffix: "%" },
-            { label: "Fav Module", value: null, icon: Lightbulb, color: "from-amber-400 to-orange-500", suffix: "", text: "Learning" },
-          ].map((stat, i) => {
+          {selectedChild && (
+            <motion.div
+              className="mt-3 px-4 py-2.5 rounded-2xl flex items-center gap-2"
+              style={{ background: "#dbeafe", border: "1.5px solid #93c5fd" }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              <span>📍</span>
+              <p className="text-sm font-bold" style={{ color: "#1d4ed8" }}>
+                Viewing analytics for <span className="font-black">{selectedChild}</span>
+              </p>
+            </motion.div>
+          )}
+        </motion.div>
+
+        {/* Stats row */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+          {stats.map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <Card key={i} className="p-5 border-0 shadow-sm overflow-hidden relative">
-                <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-5`} />
-                <div className={`w-9 h-9 bg-gradient-to-br ${stat.color} rounded-xl flex items-center justify-center mb-3 shadow`}>
-                  <Icon className="w-4 h-4 text-white" />
+              <motion.div
+                key={stat.label}
+                className="rounded-2xl p-4"
+                style={{
+                  background: "rgba(255,255,255,0.88)",
+                  border: `1.5px solid ${stat.bg}`,
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
+                }}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 + i * 0.06 }}
+              >
+                <div
+                  className="w-8 h-8 rounded-xl flex items-center justify-center mb-2 shadow-sm"
+                  style={{ background: stat.bg }}
+                >
+                  <Icon size={16} style={{ color: stat.color }} />
                 </div>
-                <p className="text-xs text-gray-500 font-semibold mb-1">{stat.label}</p>
-                <p className="text-2xl font-black text-gray-800">
-                  {stat.value !== null ? `${stat.value}${stat.suffix}` : stat.text}
+                <p className="text-2xl font-black" style={{ color: "#1e1532" }}>
+                  {stat.value}<span className="text-base">{stat.suffix}</span>
                 </p>
-                {stat.label === "Weekly Progress" && (
-                  <Progress value={stat.value ?? 0} className="mt-2 h-1.5" />
+                <p className="text-xs font-semibold" style={{ color: "#9ca3af" }}>{stat.label}</p>
+                {stat.bar !== undefined && (
+                  <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: "#e5e7eb" }}>
+                    <motion.div
+                      className="h-full rounded-full"
+                      style={{ background: stat.color }}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${stat.bar}%` }}
+                      transition={{ duration: 0.8, delay: 0.3 }}
+                    />
+                  </div>
                 )}
-              </Card>
+              </motion.div>
             );
           })}
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="insights">
-          <TabsList className="grid grid-cols-4 mb-5 bg-purple-50 p-1 rounded-2xl h-auto">
-            {["insights", "activity", "strategies", "patterns"].map(tab => (
-              <TabsTrigger
-                key={tab}
-                value={tab}
-                className="rounded-xl capitalize font-semibold text-sm py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-purple-700"
-              >
-                {tab}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+        <motion.div
+          className="rounded-3xl overflow-hidden"
+          style={{
+            background: "rgba(255,255,255,0.88)",
+            border: "1.5px solid rgba(196,181,253,0.2)",
+            boxShadow: "0 2px 20px rgba(124,58,237,0.06)",
+          }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+        >
+          {/* Tab bar */}
+          <div
+            className="flex overflow-x-auto no-scrollbar px-3 pt-3 pb-0 gap-1 border-b"
+            style={{ borderColor: "rgba(196,181,253,0.15)" }}
+          >
+            {(Object.keys(TAB_META) as TabKey[]).map((tab) => {
+              const m = TAB_META[tab];
+              const isActive = activeTab === tab;
+              return (
+                <motion.button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 rounded-t-2xl font-bold text-sm transition-all"
+                  style={{
+                    background: isActive ? m.bg : "transparent",
+                    color: isActive ? m.color : "#9ca3af",
+                    borderBottom: isActive ? `2.5px solid ${m.color}` : "2.5px solid transparent",
+                  }}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  {m.emoji} {m.label}
+                </motion.button>
+              );
+            })}
+          </div>
 
-          <TabsContent value="insights">
-            <div className="space-y-3">
-              {insights.map((insight, i) => {
-                const Icon = insight.icon;
-                return (
-                  <div key={i} className={`flex gap-4 p-5 rounded-2xl border ${insight.color}`}>
-                    <div className={`w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm shrink-0`}>
-                      <Icon className={`w-5 h-5 ${insight.iconColor}`} />
-                    </div>
-                    <div>
-                      <h3 className="font-black text-gray-800">{insight.title}</h3>
-                      <p className="text-gray-600 text-sm mt-0.5">{insight.message}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </TabsContent>
+          {/* Tab content */}
+          <div className="p-5">
 
-          <TabsContent value="activity">
-            <div className="space-y-3">
-              {activityLogs.map((log) => (
-                <div key={log.id} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                  <div className="w-11 h-11 rounded-xl bg-gray-50 flex items-center justify-center text-xl shrink-0">
-                    {moduleEmojis[log.module] || "📌"}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${moduleColors[log.module] || "bg-gray-100 text-gray-600"}`}>
-                        {log.module}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-700 font-medium">{log.activity}</p>
-                    <p className="text-xs text-gray-400">{formatTimeAgo(log.timestamp)} · {log.duration} min</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <div className={`text-lg font-black ${log.performance >= 85 ? "text-emerald-500" : log.performance >= 70 ? "text-amber-500" : "text-red-400"}`}>
-                      {log.performance}%
-                    </div>
-                    <div className="flex gap-0.5 justify-end mt-1">
-                      {[1,2,3].map(star => (
-                        <span key={star} className="text-xs" style={{ opacity: star <= (log.performance >= 90 ? 3 : log.performance >= 70 ? 2 : 1) ? 1 : 0.2 }}>⭐</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="strategies">
-            <div className="grid sm:grid-cols-2 gap-3">
-              {communicationStrategies.map((s, i) => (
-                <div key={i} className="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">{s.emoji}</span>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-1">
-                        <p className="font-black text-gray-800">{s.strategy}</p>
-                        <Badge variant="outline" className={s.impact === "High" ? "border-emerald-300 text-emerald-600 bg-emerald-50" : "border-amber-300 text-amber-600 bg-amber-50"}>
-                          {s.impact}
-                        </Badge>
+            {/* Insights */}
+            {activeTab === "insights" && (
+              <div className="flex flex-col gap-3">
+                {insights.map((insight, i) => {
+                  const Icon = insight.icon;
+                  return (
+                    <motion.div
+                      key={i}
+                      className="flex gap-4 p-4 rounded-2xl"
+                      style={{ background: insight.bg, border: `1.5px solid ${insight.color}22` }}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.08 }}
+                    >
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                        style={{ background: "white" }}
+                      >
+                        <Icon size={18} style={{ color: insight.color }} />
                       </div>
-                      <p className="text-sm text-gray-500 leading-relaxed">{s.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
+                      <div>
+                        <h3 className="font-black text-sm mb-0.5" style={{ color: "#1e1532" }}>{insight.title}</h3>
+                        <p className="text-xs font-semibold" style={{ color: "#6b7280" }}>{insight.message}</p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
 
-          <TabsContent value="patterns">
-            <div className="grid sm:grid-cols-2 gap-3">
-              {learningPatterns.map((p, i) => (
-                <div key={i} className="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">{p.emoji}</span>
-                    <div>
-                      <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide">{p.pattern}</p>
-                      <p className="font-black text-purple-600 mt-0.5">{p.value}</p>
-                      <p className="text-sm text-gray-500 mt-1 leading-relaxed">{p.insight}</p>
+            {/* Activity */}
+            {activeTab === "activity" && (
+              <div className="flex flex-col gap-3">
+                {activityLogs.map((log, i) => {
+                  const meta = moduleColors[log.module] ?? { color: "#6b7280", bg: "#f3f4f6", emoji: "📌" };
+                  return (
+                    <motion.div
+                      key={log.id}
+                      className="flex items-center gap-3 p-4 rounded-2xl"
+                      style={{ background: meta.bg, border: `1.5px solid ${meta.color}22` }}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.07 }}
+                    >
+                      <span className="text-2xl">{meta.emoji}</span>
+                      <div className="flex-1">
+                        <p className="font-black text-sm" style={{ color: "#1e1532" }}>{log.module}</p>
+                        <p className="text-xs font-semibold" style={{ color: "#6b7280" }}>{log.activity}</p>
+                        <p className="text-xs font-semibold mt-0.5" style={{ color: "#9ca3af" }}>{formatTimeAgo(log.timestamp)} · {log.duration} min</p>
+                      </div>
+                      <div
+                        className="px-3 py-1 rounded-full font-black text-sm"
+                        style={{
+                          background: log.performance >= 85 ? "#d1fae5" : log.performance >= 65 ? "#fef3c7" : "#fee2e2",
+                          color: log.performance >= 85 ? "#059669" : log.performance >= 65 ? "#d97706" : "#dc2626",
+                        }}
+                      >
+                        {log.performance}%
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Strategies */}
+            {activeTab === "strategies" && (
+              <div className="flex flex-col gap-3">
+                {communicationStrategies.map((s, i) => (
+                  <motion.div
+                    key={i}
+                    className="flex items-start justify-between p-4 rounded-2xl"
+                    style={{ background: "#f8fafc", border: "1.5px solid #e5e7eb" }}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.07 }}
+                  >
+                    <div className="flex-1 pr-3">
+                      <p className="font-black text-sm mb-0.5" style={{ color: "#1e1532" }}>{s.strategy}</p>
+                      <p className="text-xs font-semibold" style={{ color: "#6b7280" }}>{s.description}</p>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+                    <span
+                      className="shrink-0 px-2.5 py-1 rounded-full font-bold text-xs"
+                      style={{
+                        background: s.impact === "High" ? "#d1fae5" : "#fef3c7",
+                        color: s.impact === "High" ? "#059669" : "#d97706",
+                        border: `1.5px solid ${s.impact === "High" ? "#6ee7b7" : "#fde68a"}`,
+                      }}
+                    >
+                      {s.impact}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+
+            {/* Patterns */}
+            {activeTab === "patterns" && (
+              <div className="grid sm:grid-cols-2 gap-3">
+                {learningPatterns.map((p, i) => (
+                  <motion.div
+                    key={i}
+                    className="p-4 rounded-2xl"
+                    style={{ background: "#f8fafc", border: "1.5px solid #e5e7eb" }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.07 }}
+                  >
+                    <span className="text-2xl">{p.emoji}</span>
+                    <p className="text-xs font-bold uppercase tracking-wide mt-2 mb-0.5" style={{ color: "#9ca3af" }}>{p.pattern}</p>
+                    <p className="font-black text-sm mb-1" style={{ color: "#7c3aed" }}>{p.value}</p>
+                    <p className="text-xs font-semibold" style={{ color: "#6b7280" }}>{p.insight}</p>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+        </motion.div>
       </div>
     </div>
   );

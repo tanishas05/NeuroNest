@@ -1,13 +1,16 @@
-// src/app/components/Layout.tsx
+// src/components/Layout.tsx
 import { useEffect, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router";
 import { Brain, BookOpen, Gamepad2, BarChart3, Compass, LogOut } from "lucide-react";
+import { motion } from "motion/react";
 
 interface NavItem {
   path: string;
   icon: any;
   label: string;
   emoji: string;
+  accent: string;
+  accentBg: string;
 }
 
 export function Layout() {
@@ -19,19 +22,18 @@ export function Layout() {
     setRole(localStorage.getItem("role"));
   }, []);
 
-  const navItems: NavItem[] =
-    role === "parent"
-      ? [
-          { path: "/parent-dashboard", icon: BarChart3, label: "Dashboard", emoji: "📊" },
-          { path: "/connect-child", icon: Compass, label: "Connect Child", emoji: "🔗" },
-        ]
-      : role === "child"
-      ? [
-          { path: "/social-coach", icon: Brain, label: "Social Coach", emoji: "🧠" },
-          { path: "/learning", icon: BookOpen, label: "Learning", emoji: "📚" },
-          { path: "/dyslexia-games", icon: Gamepad2, label: "Games", emoji: "🎮" },
-        ]
-      : [];
+  const childItems: NavItem[] = [
+    { path: "/social-coach",   icon: Brain,    label: "Social Coach",    emoji: "💬", accent: "#7c3aed", accentBg: "#ede9fe" },
+    { path: "/learning",       icon: BookOpen, label: "Learning",        emoji: "📚", accent: "#059669", accentBg: "#d1fae5" },
+    { path: "/dyslexia-games", icon: Gamepad2, label: "Games",           emoji: "🎮", accent: "#be185d", accentBg: "#fce7f3" },
+  ];
+
+  const parentItems: NavItem[] = [
+    { path: "/parent-dashboard", icon: BarChart3, label: "Dashboard",     emoji: "📊", accent: "#2563eb", accentBg: "#dbeafe" },
+    { path: "/connect-child",    icon: Compass,  label: "Connect Child",  emoji: "🔗", accent: "#059669", accentBg: "#d1fae5" },
+  ];
+
+  const navItems = role === "parent" ? parentItems : role === "child" ? childItems : [];
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
@@ -39,118 +41,133 @@ export function Layout() {
     window.location.href = "/";
   };
 
-  const isChild = role === "child";
+  const isParent = role === "parent";
 
   return (
-    <div className={`min-h-screen ${isChild ? "bg-gradient-to-br from-violet-50 via-pink-50 to-yellow-50" : "bg-gradient-to-br from-slate-50 via-purple-50 to-white"}`}>
-
+    <div
+      className="min-h-screen"
+      style={{ background: isParent
+        ? "linear-gradient(160deg, #f0fdf4 0%, #eff6ff 50%, #faf8ff 100%)"
+        : "linear-gradient(160deg, #faf8ff 0%, #ede9fe 40%, #fce7f3 100%)"
+      }}
+    >
       {!isLanding && role && (
-        <header className={`sticky top-0 z-50 border-b ${
-          isChild
-            ? "bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 border-purple-400 shadow-lg shadow-purple-200"
-            : "bg-white border-gray-200 shadow-sm"
-        }`}>
-          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-
+        <header
+          className="sticky top-0 z-50 border-b"
+          style={{
+            background: "rgba(255,255,255,0.85)",
+            backdropFilter: "blur(16px)",
+            borderColor: isParent ? "rgba(37,99,235,0.1)" : "rgba(124,58,237,0.1)",
+          }}
+        >
+          <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2.5">
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-lg shadow ${
-                isChild ? "bg-white/20 text-white" : "bg-gradient-to-br from-purple-500 to-pink-500"
-              }`}>
-                {isChild ? "🧒" : <Brain className="w-5 h-5 text-white" />}
-              </div>
-              <span className={`font-black text-lg tracking-tight ${isChild ? "text-white" : "text-gray-800"}`}>
-                NeuroKids
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <motion.div
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-xl shadow-md"
+                style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7, #ec4899)" }}
+                whileHover={{ rotate: -8, scale: 1.08 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                🪺
+              </motion.div>
+              <span
+                className="font-black text-xl tracking-tight"
+                style={{ color: "#4c1d95", fontFamily: "'Nunito', sans-serif" }}
+              >
+                NeuroNest
               </span>
-              {isChild && (
-                <span className="bg-white/20 text-white text-xs font-bold px-2 py-0.5 rounded-full hidden sm:block">
-                  Child Mode ✨
+              {role && (
+                <span
+                  className="hidden sm:inline px-2 py-0.5 rounded-full text-xs font-bold"
+                  style={isParent
+                    ? { background: "#dbeafe", color: "#2563eb" }
+                    : { background: "#ede9fe", color: "#7c3aed" }
+                  }
+                >
+                  {isParent ? "Parent" : "Explorer 🌟"}
                 </span>
               )}
             </Link>
 
-            {/* Desktop Nav */}
+            {/* Desktop nav */}
             <nav className="hidden md:flex items-center gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.path;
                 return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm transition-all ${
-                      isChild
-                        ? isActive
-                          ? "bg-white text-purple-600 shadow-md"
-                          : "text-white/80 hover:bg-white/20 hover:text-white"
-                        : isActive
-                        ? "bg-purple-100 text-purple-700"
-                        : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                  >
-                    <span className="text-base">{item.emoji}</span>
-                    <span>{item.label}</span>
+                  <Link key={item.path} to={item.path}>
+                    <motion.div
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold transition-all"
+                      style={isActive
+                        ? { background: item.accentBg, color: item.accent }
+                        : { color: "#6b7280" }
+                      }
+                      whileHover={{ scale: 1.04 }}
+                      whileTap={{ scale: 0.96 }}
+                    >
+                      <span>{item.emoji}</span>
+                      {item.label}
+                    </motion.div>
                   </Link>
                 );
               })}
-
-              <button
+              <motion.button
                 onClick={handleLogout}
-                className={`ml-3 flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${
-                  isChild
-                    ? "bg-white/20 text-white hover:bg-white/30"
-                    : "bg-red-50 text-red-500 hover:bg-red-100 border border-red-200"
-                }`}
+                className="ml-3 flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold"
+                style={{ color: "#ef4444" }}
+                whileHover={{ scale: 1.04, background: "#fee2e2" }}
+                whileTap={{ scale: 0.96 }}
               >
-                <LogOut className="w-4 h-4" />
-                <span className="hidden sm:block">Logout</span>
-              </button>
+                <LogOut size={15} />
+                Logout
+              </motion.button>
             </nav>
           </div>
         </header>
       )}
 
-      <main className="w-full pb-20 md:pb-4">
+      <main className="w-full pb-24 md:pb-4">
         <Outlet />
       </main>
 
-      {/* Mobile Bottom Nav */}
+      {/* Mobile bottom nav */}
       {!isLanding && role && (
-        <nav className={`md:hidden fixed bottom-0 left-0 right-0 z-50 border-t ${
-          isChild
-            ? "bg-gradient-to-r from-violet-500 to-pink-500 border-purple-400"
-            : "bg-white border-gray-200 shadow-lg"
-        }`}>
+        <nav
+          className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t"
+          style={{
+            background: "rgba(255,255,255,0.95)",
+            backdropFilter: "blur(20px)",
+            borderColor: "rgba(124,58,237,0.1)",
+          }}
+        >
           <div className="flex items-center justify-around py-2 px-2">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${
-                    isChild
-                      ? isActive
-                        ? "bg-white/20 text-white scale-110"
-                        : "text-white/70"
-                      : isActive
-                      ? "text-purple-600"
-                      : "text-gray-500"
-                  }`}
-                >
-                  <span className="text-xl">{item.emoji}</span>
-                  <span className="text-xs font-semibold">{item.label}</span>
+                <Link key={item.path} to={item.path} className="flex-1">
+                  <motion.div
+                    className="flex flex-col items-center gap-0.5 py-1.5 rounded-2xl mx-1"
+                    style={isActive ? { background: item.accentBg } : {}}
+                    whileTap={{ scale: 0.92 }}
+                  >
+                    <span className="text-xl">{item.emoji}</span>
+                    <span
+                      className="text-[10px] font-bold"
+                      style={{ color: isActive ? item.accent : "#9ca3af" }}
+                    >
+                      {item.label}
+                    </span>
+                  </motion.div>
                 </Link>
               );
             })}
             <button
               onClick={handleLogout}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${
-                isChild ? "text-white/70" : "text-red-400"
-              }`}
+              className="flex-1 flex flex-col items-center gap-0.5 py-1.5"
             >
-              <LogOut className="w-5 h-5" />
-              <span className="text-xs font-semibold">Exit</span>
+              <span className="text-xl">👋</span>
+              <span className="text-[10px] font-bold" style={{ color: "#ef4444" }}>Out</span>
             </button>
           </div>
         </nav>
